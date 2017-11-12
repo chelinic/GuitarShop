@@ -24,3 +24,10 @@ patchAlteraNomeR pid = do
 			novoNome <- requireJsonBody :: Handler Produto
 			runBD $ update pid [ProdutoNome =. (nome novoNome)]
 			sendStatusJSON noContent204 (object ["resp" .=("Updated" ++ show (fromSqlKey pid))])
+
+
+--    /funcionario/login                 LoginFuncR        GET
+
+postCadastroFuncR :: Handler TypedContent
+postCadastroFuncR = undefined
+
