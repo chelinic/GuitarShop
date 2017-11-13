@@ -8,17 +8,18 @@
     /guitarras                         GuitarrasR        GET
     /baixos                            BaixosR           GET
     /pedais                            PedaisR           GET
+    /amplificadores                    AmplificadoresR   GET
     /acessorios                        AcessoriosR       GET
     
-    /produto/cadastro                  CadastroProdR     POST
-    /produto/busca/#Text               BuscaProdR        GET
-    /produto/view/#ProdutoId           VerProdR          GET
+    /produto/cadastro                  CadastroProdR    POST
+    /produto/busca/#Text               BuscaProdR       GET
+    /produto/view/#ProdutoId           VerProdR         GET
     
-    /funcionario/login                 LoginFuncR        GET
+    /funcionario/login/#Text/#Text     LoginFuncR        GET
     /funcionario/cadastro              CadastroFuncR     POST
     /funcionario/repestoque/#ProdutoId RepEstoqueR       PATCH
 
-    /cliente/login                     LoginCliR         GET
+    /cliente/login/#Text/#Text         LoginCliR         GET
     /cliente/cadastro                  CadastroCliR      POST
     /cliente/alterardados/#ClienteId   AlterarDadosCliR  PUT
     /cliente/carrinho                  CarrinhoComprasR  GET
