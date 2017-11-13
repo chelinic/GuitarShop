@@ -1,33 +1,40 @@
 Cliente json
-    nome       Text
-    cpf 	    Text
-    senha       Text
-	email	    Text
-	telefone    Text
-	UniqueEmail email
+    nome            Text
+    cpf 	        Text
+    senha           Text
+	emailcli        Text
+	telefone        Text
+	UniqueEmailCli  emailcli
     
-    deriving show
+    deriving Show
     
 Produto json
-    nome        Text
-    valor       Double
-    ano         Int
-    datachegada Day
-    observacoes Text
-    estoque     Int
-    deriving show
+    nome            Text
+    valor           Double
+    ano             Int
+    dtchegada       Day
+    observacoes     Text
+    estoqueatual    Int
+    estoqueminimo   Int
+    deriving Show
     
 Funcionario json
-    nome        Text
-    senha       Text
-    cpf 	    Text
-	email	    Text
-	telefone    Text
-	UniqueEmail email
-    deriving show
+    nome            Text
+    senha           Text
+    cpf 	        Text
+	emailfunc       Text
+	telefone        Text
+	UniqueEmailFunc emailfunc
+    deriving Show
     
 Venda json
     cliid	    ClienteId
 	proid	    ProdutoId
-	data        Day
+	dtvenda     Day
 	quantidade  Int
+	formapgtoid FormaPgtoId
+	
+FormaPgto json
+    formapgto   Text
+    
+    
