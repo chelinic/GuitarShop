@@ -1,8 +1,11 @@
 {-# LANGUAGE NoImplicitPrelude #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE QuasiQuotes #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
-{-# LANGUAGE TypeFamilies #-}
+{-# LANGUAGE TypeFamilies, DeriveGeneric #-}
+
+
 module Handler.Home where
 
 import Import
@@ -10,48 +13,47 @@ import Network.HTTP.Types.Status
 import Database.Persist.Postgresql
 
 getHomeR :: Handler Html
-getHomeR = do
-        defaultLayout $ do
-        $ (whamletFile "templates/home.whamlet")
-
+getHomeR = do 
+	defaultLayout $ do
+	    addStylesheet $ (StaticR css_home_css)
+	    addStylesheet $ (StaticR css_bootstrap_css)
+	    $(whamletFile "templates/Home.hamlet")
+    
 getRecemChegadosR :: Handler Html
 getRecemChegadosR = do
     defaultLayout $ do
         toWidget $ [lucius|
-            h1{
-                color:pink;
-            }
-        |]
-        [whamlet|
-            <h1> Recem Chegados
-            <a href=@{HomeR}> Voltar
-    |]
-
-
-getGuitarrasR :: Handler Html
-getGuitarrasR = do
-    defaultLayout $ do
-        toWidget $ [lucius|
-            h1{
-                color:pink;
+            h1 {
+                color: blue;
             }
         |]
         [whamlet|
             <h1> Guitarras
-            <a href=@{HomeR}> Voltar
-    |]
+        |]
+        
+getGuitarrasR :: Handler Html
+getGuitarrasR = do
+    defaultLayout $ do
+        toWidget $ [lucius|
+            h1 {
+                color: blue;
+            }
+        |]
+        [whamlet|
+            <h1> Guitarras
+        |]
+        
 
 getBaixosR :: Handler Html
 getBaixosR = do
     defaultLayout $ do
         toWidget $ [lucius|
             h1{
-                color:pink;
+                color: blue;
             }
         |]
         [whamlet|
             <h1> Baixos
-            <a href=@{HomeR}> Voltar
         |]
 
 getPedaisR :: Handler Html
@@ -59,24 +61,33 @@ getPedaisR = do
     defaultLayout $ do
         toWidget $ [lucius|
             h1{
-                color:pink;
+                color: blue;
             }
         |]
         [whamlet|
             <h1> Pedais
-            <a href=@{HomeR}> Voltar
         |]
-        
-getAcessoriossR :: Handler Html
-getAcessoriossR = do
+
+getAmplificadoresR :: Handler Html
+getAmplificadoresR = do
     defaultLayout $ do
         toWidget $ [lucius|
             h1{
-                color:pink;
+                color: blue;
             }
         |]
         [whamlet|
-            <h1> Pedais
-            <a href=@{HomeR}> Voltar
+            <h1> AmplificadoresR
         |]
 
+getAcessoriosR :: Handler Html
+getAcessoriosR = do
+    defaultLayout $ do
+        toWidget $ [lucius|
+            h1{
+                color: blue;
+            }
+        |]
+        [whamlet|
+            <h1> Acessorios
+        |]
