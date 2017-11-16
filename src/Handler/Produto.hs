@@ -16,26 +16,50 @@ data Nome = Nome {nome :: Text} deriving Generic
 instance ToJSON Nome where
 instance FromJSON Nome where
 
+formProduto :: Form Produto
+formProduto = renderBootstrap $ Produto 
+    <$> areq textField "Nome:" Nothing
+    <*> areq doubleField "Valor:" Nothing
+    <*> areq dayField "Data de chegada:" Nothing
+    <*> areq intField "Ano:" Nothing
+    <*> areq textField "Observacoes:" Nothing
+    <*> areq intField "Estoque minimo:" Nothing
+    <*> areq intField "Estoque atual:" Nothing
 
-postProdR :: Handler TypedContent
-postProdR = do
-	prod <- requireJsonBody :: Handler Produto
-	pid <- runDB $ insert prod
-   	sendStatusJSON created201 (object ["resp" .=(fromSqlKey pid)])
-		-- "retornar um 201 para dizer que houve exito"
-		-- object transforma {"resp" :1} em JSON
-				-- o produto com id 1
+    
+postApagarProdR :: ProdutoId -> Handler Html
+postApagarProdR pid = do
+    runDB $ delete pid
+    redirect TodosProdR
 
-{--
-deleteProdutoDelR :: ProdutoId -> Handler Value
-deleteProdutoDelR pid = do
-	_ <- runDB $ get404 pid
-	runDB $ delete pid
-	sendStatusJSON noContent204 (object ["resp" .=("Deleted" ++ show (fromSqlKey pid))])
-	{-- o get404 procura o registro e prossegue caso encontre 
-	 barra o restante da aplicação e manda um 404
-	--}
---}
+getTodosProdR :: Handler Html
+getTodosProdR = do 
+    produtos <- runDB $ selectList [] [Asc ProdutoNome]
+    defaultLayout $ do 
+        addStylesheet $ (StaticR css_bootstrap_css)
+        [whamlet|
+            <table>
+                <thead>
+                    <tr>
+                        <td> Id
+                        <td> Nome 
+                        <td> Valor 
+                        <td> Produto
+                        <td> 
+                
+                <tbody>
+                    $forall (Entity pid produto) <- produtos
+                        <tr> 
+                            <td> #{fromSqlKey pid}
+                            <td> #{produtoNome produto}
+                            <td> #{produtoValor produto}
+                            <td> #{produtoEstoqueatual produto}
+                            <td> 
+                                <form action=@{ApagarProdR pid} method=post>
+                                    <input type="submit" value="Deletar">
+                            
+        |]
+
 
 getBuscaProdR :: ProdutoId -> Handler Value
 getBuscaProdR pid = do
@@ -60,10 +84,54 @@ putAlteraProdR pid = do
 	runDB $ replace pid novoProd
 	sendStatusJSON noContent204 (object ["resp" .=("Updated" ++ show (fromSqlKey pid))])
 	
-getVerProdR :: Handler Html
-getVerProdR = undefined
+getVerProdR :: ProdutoId -> Handler Html
+getVerProdR pid = do
+    produto <- runDB $ get404 pid
+    defaultLayout $
+        [whamlet| 
+            <div>
+            <ul>
+                <li><strong> Nome: #{produtoNome produto}
+                <li><strong> Preco: #{produtoValor produto}
+                <li><strong> Ano: #{produtoAno produto}
+                <li><strong> Estoque: #{produtoEstoqueatual produto}
+                <li><strong> Observacoes: #{produtoObservacoes produto}
+        |]
 
 postCadastroProdR :: Handler Html
-postCadastroProdR = undefined
+postCadastroProdR = do
+    ((result,_),_) <- runFormPost formProduto
+    case result of
+        FormSuccess produto -> do
+            runDB $ insert produto
+            redirect CadastroProdR
+        _ -> redirect HomeR
+        -- em caso de erro
+        
+getCadastroProdR :: Handler Html
+getCadastroProdR = do
+    (widget, enctype) <- generateFormPost formProduto
+    defaultLayout $ do
+        addStylesheet $ (StaticR css_bootstrap_css)
+        [whamlet|
+            <form action=@{CadastroProdR} method=post anctype=#{enctype}>
+            ^{widget}
+            <input type="submit" value="Cadastrar">
+        |]
+    {--
+        o widget é o formulário
+        o action é o mesmo, porém no post
     
+    --}
     
+getDetalheProdR :: ProdutoId -> Handler Html
+getDetalheProdR pid = do
+    produto <- runDB $ get404 pid
+    defaultLayout $
+        [whamlet| 
+            <div>
+            <ul>
+                <li><strong> Nome: #{produtoNome produto}
+                <li><strong> Preco: #{produtoValor produto}
+                <li><strong> Estoque: #{produtoEstoqueatual produto}
+        |]
