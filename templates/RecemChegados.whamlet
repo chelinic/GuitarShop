@@ -1,0 +1,23 @@
+<h1>Recem Chegados
+    Email:<br>
+        <input type="text" name="email"><br>
+        Senha:<br>
+        <input type="text" name="senha"><br>  
+        <input type="submit" name="login"><br><br>
+    <ul class="menu">
+        <li> <a href=@{HomeR}> Home</a> </li>
+        <li> <a href=@{RecemChegadosR}> Recém chegados </a> </li>
+        <li> <a href=@{GuitarrasR}> Guitarras </a> </li>
+        <li> <a href=@{BaixosR}> Baixos </a> </li>
+        <li> <a href=@{AmplificadoresR}> Amplificadores </a> </li>
+        <li> <a href=@{PedaisR}> Pedais </a> </li>
+        <li> <a href=@{AcessoriosR}> Acessórios </a> </li>
+        
+
+
+
+    
+    
+    
+    
+    
