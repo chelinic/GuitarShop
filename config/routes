@@ -11,16 +11,19 @@
     /amplificadores                    AmplificadoresR   GET
     /acessorios                        AcessoriosR       GET
     
-    /produto/cadastro                  CadastroProdR    POST
-    /produto/busca/#Text               BuscaProdR       GET
-    /produto/view/#ProdutoId           VerProdR         GET
+    /produto/cadastro                  CadastroProdR    GET POST
+    /produto/#ProdutoId/busca          BuscaProdR       GET
+    /produto/#ProdutoId/view           VerProdR         GET
+    /produto/todos                     TodosProdR       GET
+   	/produto/#ProdutoId/detalhes	   DetalheProdR     GET
+	/produto/#ProdutoId/apagar			ApagarProdR	    POST
     
     /funcionario/login/#Text/#Text     LoginFuncR        GET
-    /funcionario/cadastro              CadastroFuncR     POST
+    /funcionario/cadastro              CadastroFuncR     GET POST
     /funcionario/repestoque/#ProdutoId RepEstoqueR       PATCH
 
     /cliente/login/#Text/#Text         LoginCliR         GET
-    /cliente/cadastro                  CadastroCliR      POST
+    /cliente/cadastro                  CadastroCliR      GET POST
     /cliente/alterardados/#ClienteId   AlterarDadosCliR  PUT
     /cliente/carrinho                  CarrinhoComprasR  GET
     /cliente/finalizarcompra           FinalizarCompraR  POST

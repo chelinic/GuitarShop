@@ -11,19 +11,19 @@ Cliente json
 Produto json
     nome            Text
     valor           Double
-    ano             Int
     dtchegada       Day
+    ano             Int
     observacoes     Text
-    estoqueatual    Int
     estoqueminimo   Int
+    estoqueatual    Int
     deriving Show
     
 Funcionario json
     nome            Text
-    senha           Text
     cpf 	        Text
 	emailfunc       Text
 	telefone        Text
+	senha           Text
 	UniqueEmailFunc emailfunc
     deriving Show
     
