@@ -61,18 +61,7 @@ getTodosProdR = do
         |]
 
 
-getBuscaProdR :: ProdutoId -> Handler Value
-getBuscaProdR pid = do
-	produto <- runDB $ get404 pid
-	sendStatusJSON ok200 (object ["resp" .= toJSON produto])
-{--
-	[whamlet|
-	    <ul>
-	        $forall prods <- produto
-	        <li> #{pack prods}
-	 |]
---}
-    		
+
 -- unpack retorna string 
 -- return para colocar algo puro dentro da mônada
 -- $ para monada Maybe	
@@ -135,3 +124,50 @@ getDetalheProdR pid = do
                 <li><strong> Preco: #{produtoValor produto}
                 <li><strong> Estoque: #{produtoEstoqueatual produto}
         |]
+        
+{--
+Query Join
+
+getListaProdFR :: ClienteId -> Handler TypedContent
+getListaProdFR cid = do 
+    lista' <- runDB $ selectList [CompraCliid ==. cid] []
+    lista <- return $ fmap (\(Entity _ comp) -> comp) lista'
+    prodsIds <- return $ fmap compraProid lista
+    produtos <- sequence $ fmap (\pid -> runDB $ get404 pid) prodsIds
+    sendStatusJSON ok200 (object ["resp" .= (toJSON produtos)])
+    
+--}
+
+
+getBuscaProdR :: Text -> Handler Html
+getBuscaProdR termo = do 
+    listaprod <- runDB $ rawSql
+        ("SELECT ?? \
+        \FROM produto \
+        \WHERE produto.produtoNome = " <> (termo)
+        [] :: Handler [(Entity Produto)]    
+    defaultLayout $ do 
+        addStylesheet $ (StaticR css_bootstrap_css)
+        [whamlet|
+            <table>
+                <thead>
+                    <tr>
+                        <td> Id
+                        <td> Nome 
+                        <td> Valor 
+                        <td> Produto
+                        <td>  
+                
+                <tbody>
+                    $forall (Entity termo produto) <- listaprod
+                        <tr> 
+                            <td> #{ProdutoId}
+                            <td> #{produtoNome produto}
+                            <td> #{produtoValor produto}
+                            <td> 
+                                
+        |]
+    
+
+        
+        
