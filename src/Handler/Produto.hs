@@ -144,7 +144,7 @@ getBuscaProdR termo = do
     listaprod <- runDB $ rawSql
         ("SELECT ?? \
         \FROM produto \
-        \WHERE produto.produtoNome = " <> (termo)
+        \WHERE produto.produtoNome LIKE " <> (termo))
         [] :: Handler [(Entity Produto)]    
     defaultLayout $ do 
         addStylesheet $ (StaticR css_bootstrap_css)
@@ -159,9 +159,9 @@ getBuscaProdR termo = do
                         <td>  
                 
                 <tbody>
-                    $forall (Entity termo produto) <- listaprod
+                    $forall (Entity idproduto produto) <- listaprod
                         <tr> 
-                            <td> #{ProdutoId}
+                            <td> #{fromSqlKey idproduto}
                             <td> #{produtoNome produto}
                             <td> #{produtoValor produto}
                             <td> 
