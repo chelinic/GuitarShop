@@ -12,20 +12,23 @@
     /acessorios                        AcessoriosR       GET
     
     /produto/cadastro                  CadastroProdR    GET POST
-    /produto/#ProdutoId/busca          BuscaProdR       GET
+    /produto/#Text/busca               BuscaProdR       GET
     /produto/#ProdutoId/view           VerProdR         GET
     /produto/todos                     TodosProdR       GET
    	/produto/#ProdutoId/detalhes	   DetalheProdR     GET
-	/produto/#ProdutoId/apagar			ApagarProdR	    POST
+	/produto/#ProdutoId/apagar		   ApagarProdR	    POST
     
+    /funcionario/                      FuncR             GET
     /funcionario/login/#Text/#Text     LoginFuncR        GET
     /funcionario/cadastro              CadastroFuncR     GET POST
     /funcionario/repestoque/#ProdutoId RepEstoqueR       PATCH
+    /funcionario/logout                FuncLogoutR       POST
 
     /cliente/login/#Text/#Text         LoginCliR         GET
     /cliente/cadastro                  CadastroCliR      GET POST
     /cliente/alterardados/#ClienteId   AlterarDadosCliR  PUT
     /cliente/carrinho                  CarrinhoComprasR  GET
     /cliente/finalizarcompra           FinalizarCompraR  POST
+    /cliente/logout                    CliLogoutR       POST
     
     
