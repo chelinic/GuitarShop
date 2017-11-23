@@ -1,0 +1,42 @@
+<div class=header>
+    <a href=@{AreaFuncR}> Área de funcionários<br>
+    <a href=@{CadastroCliR} Cadastre-se><br>
+    Email:<br>
+    <input type="text" name="email"><br>
+    Senha:<br>
+    <input type="text" name="senha"><br>  
+    <input type="submit" name="login"><br><br>
+    <input type="text" name="barrabusca">
+    <input type="submit" name="buscar">
+    
+<div class=dropdown>
+      <button class="dropbtn">Instrumentos
+        <div class="dropdown-content">
+            <a hreff=@{GuitarrasR>Guitarras</a>
+            <a href=@{BaixosR}>Baixos</a>
+            <a href=@{VioloesR}>Violões</a> 
+<ul>
+    <li class=menuitem> <a href=@{HomeR}> Home</a> </li>
+    <li class=menuitem> <a href=@{RecemChegadosR}> Recém chegados </a> </li>
+    <li class=menuitem> <a href=@{AmplificadoresR}> Amplificadores </a> </li>
+    <li class=menuitem> <a href=@{PedaisR}> Pedais </a> </li>
+    <li class=menuitem> <a href=@{AcessoriosR}> Acessórios </a> </li>
+        
+<div class=column>
+    <h1>Lateral esquerda
+    
+<div class=column>
+    <h1>Bem Vindo
+    
+<div class=rodape>
+    <a>Eu que fiz =D
+
+        
+
+
+
+    
+    
+    
+    
+    
