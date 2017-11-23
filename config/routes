@@ -21,14 +21,15 @@
     /funcionario/                      FuncR             GET
     /funcionario/login/#Text/#Text     LoginFuncR        GET
     /funcionario/cadastro              CadastroFuncR     GET POST
-    /funcionario/repestoque/#ProdutoId RepEstoqueR       PATCH
+    /funcionario/repestoque            RepEstoqueR       PATCH
     /funcionario/logout                FuncLogoutR       POST
+    /funcionario/vendas                ListarVendasR     GET
 
     /cliente/login/#Text/#Text         LoginCliR         GET
     /cliente/cadastro                  CadastroCliR      GET POST
     /cliente/alterardados/#ClienteId   AlterarDadosCliR  PUT
     /cliente/carrinho                  CarrinhoComprasR  GET
     /cliente/finalizarcompra           FinalizarCompraR  POST
-    /cliente/logout                    CliLogoutR       POST
+    /cliente/logout                    CliLogoutR        POST
     
     
