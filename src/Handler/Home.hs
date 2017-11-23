@@ -14,9 +14,24 @@ import Database.Persist.Postgresql
 
 getHomeR :: Handler Html
 getHomeR = do
+    clientelog <- lookupSession "_ID"
     defaultLayout $ do
        --addStylesheet $(StaticR css_home_css)
 	    $(whamletFile "templates/Home.whamlet")
+	     [whamlet|
+            $maybe aluno <- alunologado
+                <h1> _{MsgBemvindo} - #{aluno}
+            $nothing
+                <h1> _{MsgBemvindo} - _{MsgVisita}
+            <ul>
+                <li> <a href=@{AlunoR}> Cadastro de Usuario
+                $maybe cli <- clientelog
+                    <form action=@{LogoutCliR} method=post>
+                        <input type="submit" value="Logout">
+                    -- se tiver logado, faz o logout
+                $nothing
+                    <li> <a href=@{LoginCliR}> Login
+        |]
 
 getRecemChegadosR :: Handler Html
 getRecemChegadosR = do
