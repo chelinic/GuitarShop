@@ -10,6 +10,10 @@
     /pedais                            PedaisR            GET
     /amplificadores                    AmplificadoresR    GET
     /acessorios                        AcessoriosR        GET
+    /violoes                           VioloesR           GET
+    /novos                             NovosR             GET
+    /usados                            UsadosR            GET
+    /vintage                           VintageR           GET
     
     /produto/cadastro                  CadastroProdR      GET POST
     /produto/#Text/busca               BuscaProdR         GET
@@ -19,14 +23,14 @@
 	/produto/#ProdutoId/apagar		   ApagarProdR	      POST
     
     /funcionario/                       FuncR             GET
-    /funcionario/login/#Text/#Text      LoginFuncR        GET
+    /funcionario/login/                 LoginFuncR        GET
     /funcionario/cadastro               CadastroFuncR     GET POST
     /funcionario/repestoque             RepEstoqueR       GET
     /funcionario/repestoque/#ProdutoId  RepEstoqueProdR   GET POST
     /funcionario/logout                 FuncLogoutR       POST
     /funcionario/vendas                 ListarVendasR     GET
 
-    /cliente/login/#Text/#Text         LoginCliR          GET
+    /cliente/login/                    LoginCliR          GET POST
     /cliente/cadastro                  CadastroCliR       GET POST
     /cliente/alterardados/#ClienteId   AlterarDadosCliR   PUT
     /cliente/finalizarcompra           FinalizarCompraR   POST
