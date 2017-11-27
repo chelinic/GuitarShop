@@ -27,17 +27,18 @@ formLoginCli = renderDivs $ (,)
     <*> areq passwordField "Senha: " Nothing   
 
 autenticar :: Text -> Text -> HandlerT App IO (Maybe (Entity Cliente))
+autenticar email senha = runDB $ selectFirst [ClienteEmailcli ==. email,
+                                              ClienteSenha ==. senha][]
+                                            -- a ","" é o AND
+                                            -- primeira lista é condição WHERE
+                                            
     -- HandlerT é monad transform
     -- App é o site
     -- o objetivo é transformar IO em um Handler
     -- retorna dentro do handler um Nothing ou um Just Aluno
     -- 2 Mônadas: Handler e Maybe
-    -- Entity é TypeFamilies: transforma o Maybe a em Maybe Aluno
-autenticar email senha = runDB $ selectFirst [ClienteEmailcli ==. email,
-                                              ClienteSenha ==. senha][]
-                                            -- a ","" é o AND
-                                            -- primeira lista é condição WHERE
-
+    -- Entity é TypeFamilies: transforma o Maybe a em Maybe Aluno                                    
+    
 getLoginCliR :: Handler Html
 getLoginCliR = do
     (widget, enctype) <- generateFormPost formLoginCli
@@ -63,10 +64,10 @@ postLoginCliR = do
                 Nothing -> do
                     setMessage [shamlet| Usuario ou senha invalido|]
                     -- hamlet sem w
-                    redirect LoginCliR
+                    redirect HomeR
                 Just (Entity clienteid cli) -> do
                     setSession "_ID" (clienteNome cli)
-                    redirect LoginCliR
+                    redirect HomeR
         _ -> redirect HomeR
 
 
