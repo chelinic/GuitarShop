@@ -21,11 +21,14 @@ data App = App
 
 mkYesodData "App" $(parseRoutesFile "config/routes")
 
+mkMessage "App" "messages" "pt-BR"
+
+
 type Form a = Html -> MForm Handler (FormResult a, Widget)
 
 instance Yesod App where
     makeLogger = return . appLogger
-    authRoute _ = Just $ LoginCliR
+--    authRoute Clientelogin Clientesenha = Just $ LoginCliR
 --    authRoute _ = Just $ LoginFuncR
     isAuthorized HomeR _ = return Authorized
     isAuthorized FuncLogoutR _ = return Authorized
