@@ -3,33 +3,33 @@
 /favicon.ico FaviconR GET
 /robots.txt RobotsR GET
 
-    /                                  HomeR             GET
-    /recemchegados                     RecemChegadosR    GET
-    /guitarras                         GuitarrasR        GET
-    /baixos                            BaixosR           GET
-    /pedais                            PedaisR           GET
-    /amplificadores                    AmplificadoresR   GET
-    /acessorios                        AcessoriosR       GET
+    /                                  HomeR              GET
+    /recemchegados                     RecemChegadosR     GET
+    /guitarras                         GuitarrasR         GET
+    /baixos                            BaixosR            GET
+    /pedais                            PedaisR            GET
+    /amplificadores                    AmplificadoresR    GET
+    /acessorios                        AcessoriosR        GET
     
-    /produto/cadastro                  CadastroProdR    GET POST
-    /produto/#Text/busca               BuscaProdR       GET
-    /produto/#ProdutoId/view           VerProdR         GET
-    /produto/todos                     TodosProdR       GET
-   	/produto/#ProdutoId/detalhes	   DetalheProdR     GET
-	/produto/#ProdutoId/apagar		   ApagarProdR	    POST
+    /produto/cadastro                  CadastroProdR      GET POST
+    /produto/#Text/busca               BuscaProdR         GET
+    /produto/#ProdutoId/view           VerProdR           GET
+    /produto/todos                     TodosProdR         GET
+   	/produto/#ProdutoId/detalhes	   DetalheProdR       GET
+	/produto/#ProdutoId/apagar		   ApagarProdR	      POST
     
-    /funcionario/                      FuncR             GET
-    /funcionario/login/#Text/#Text     LoginFuncR        GET
-    /funcionario/cadastro              CadastroFuncR     GET POST
-    /funcionario/repestoque            RepEstoqueR       PATCH
-    /funcionario/logout                FuncLogoutR       POST
-    /funcionario/vendas                ListarVendasR     GET
+    /funcionario/                       FuncR             GET
+    /funcionario/login/#Text/#Text      LoginFuncR        GET
+    /funcionario/cadastro               CadastroFuncR     GET POST
+    /funcionario/repestoque             RepEstoqueR       GET
+    /funcionario/repestoque/#ProdutoId  RepEstoqueProdR   GET POST
+    /funcionario/logout                 FuncLogoutR       POST
+    /funcionario/vendas                 ListarVendasR     GET
 
-    /cliente/login/#Text/#Text         LoginCliR         GET
-    /cliente/cadastro                  CadastroCliR      GET POST
-    /cliente/alterardados/#ClienteId   AlterarDadosCliR  PUT
-    /cliente/carrinho                  CarrinhoComprasR  GET
-    /cliente/finalizarcompra           FinalizarCompraR  POST
-    /cliente/logout                    CliLogoutR        POST
+    /cliente/login/#Text/#Text         LoginCliR          GET
+    /cliente/cadastro                  CadastroCliR       GET POST
+    /cliente/alterardados/#ClienteId   AlterarDadosCliR   PUT
+    /cliente/finalizarcompra           FinalizarCompraR   POST
+    /cliente/logout                    CliLogoutR         POST
     
     
