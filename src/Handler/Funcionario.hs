@@ -27,8 +27,8 @@ formFuncionario = renderBootstrap $ Funcionario
     <*> areq textField "Telefone:" Nothing
 
 getFuncR :: Handler Html
-getFuncR = do
-	funclog <- lookupSession "_ID"
+getFuncR = undefined
+--	funclog <- lookupSession "_ID"
 
 formLoginFunc :: Form (Text, Text)
 -- Form com dois campos de texto
@@ -48,12 +48,6 @@ autenticar email senha = runDB $ selectFirst [FuncionarioEmailfunc ==. email,
                                               FuncionarioSenha ==. senha][]
                                             -- a ","" é o AND
                                             -- primeira lista é condição WHERE
-
-getAreaFuncR :: Handler Html
-getAreaFuncR = undefined
-    -- addStylesheet $ (StaticR css_areafunc_css)
-
-
 getLoginFuncR :: Handler Html
 getLoginFuncR = do
     (widget, enctype) <- generateFormPost formLoginFunc
@@ -83,19 +77,41 @@ postLoginFuncR = do
 
                 Just (Entity funcionarioid func) -> do
                     setSession "_ID" (funcionarioNome func)
-                    redirect LoginR
+                    redirect LoginFuncR
         _ -> redirect HomeR
         
-patchRepEstoqueR :: ProdutoId -> Handler Text
-patchRepEstoqueR = undefined
-{--   	
-patchRepEstoqueR pid = do
-	_ <- runDB $ get404 pid		
-	novoEstoq <- requireJsonBody :: Handler Produto
-	runDB $ update pid [ProdutoEstoque =. (estoque novoEstoq)]
-	sendStatusJSON noContent204 (object ["resp" .=("Updated" ++ show (fromSqlKey pid))])
+getRepEstoqueR :: Handler Html
+getRepEstoqueR = do
+    listaprods <- runDB $ selectList [ProdutoEstoqueatual <=. 0] []
+    defaultLayout $ do 
+        addStylesheet $ (StaticR css_bootstrap_css)
+        [whamlet|
+            <table>
+                <thead>
+                    <tr>
+                        <td> Id
+                        <td> Nome 
+                        <td> Estoqueminimo
+                        <td> Estoqueatual
+                        <td> Produto
+                        <td>  
+                
+                <tbody>
+                    $forall (Entity idproduto produto) <- listaprods
+                        <tr> 
+                            <td> #{fromSqlKey idproduto}
+                            <td> #{produtoNome produto}
+                            <td> #{produtoEstoqueatual produto}
+                            <td> #{produtoEstoqueminimo produto}
+                            <td> 
+        |]
 
---}
+getRepEstoqueProdR :: ProdutoId -> Handler Html
+getRepEstoqueProdR = undefined
+
+postRepEstoqueProdR :: Handler Html
+postRepEstoqueProdR = do
+    redirect RepEstoqueR
 
 postCadastroFuncR :: Handler Html
 postCadastroFuncR = do
