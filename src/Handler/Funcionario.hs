@@ -11,6 +11,10 @@ import Import
 import Network.HTTP.Types.Status
 import Database.Persist.Postgresql
 import GHC.Generics
+import Database.Esqueleto.PostgreSQL
+import qualified Database.Esqueleto      as E
+import Database.Esqueleto   ((^.))
+
 
 {--
 data Estoque = Estoque {estoque :: Int} deriving Generic
@@ -82,7 +86,18 @@ postLoginFuncR = do
         
 getRepEstoqueR :: Handler Html
 getRepEstoqueR = do
-    listaprods <- runDB $ selectList [ProdutoEstoqueatual <=. 0] []
+    let listaprods = runDB $ E.select
+           $ E.from $ \(Produto `E.InnerJoin` EstadoUso) -> do
+                E.on $ Produto ^. ProdutoEstadouso E.==. EstadoUso ^. EstadoUsoId
+                E.where_ $
+                    E. EstadoUsonome != val "Vintage"
+                return
+                    ( Produto ^. ProdutoId
+                    , Produto ^. ProdutoNome
+                    , Produto ^. ProdutoEstoqueAtual
+                    , EstadoUso ^. EstadoUsonome
+                    
+                    )
     defaultLayout $ do 
         addStylesheet $ (StaticR css_bootstrap_css)
         [whamlet|
@@ -105,6 +120,7 @@ getRepEstoqueR = do
                             <td> #{produtoEstoqueminimo produto}
                             <td> 
         |]
+        
 
 getRepEstoqueProdR :: ProdutoId -> Handler Html
 getRepEstoqueProdR = undefined
@@ -148,3 +164,6 @@ postFuncLogoutR = do
     
 getListarVendas :: Handler Html
 getListarVendas = undefined
+
+
+--https://hackage.haskell.org/package/esqueleto-2.5.3/docs/Database-Esqueleto.html
