@@ -101,7 +101,7 @@ getGuitarrasR = do
        $ E.from $ \(Produto `E.InnerJoin` TipoProd) -> do
             E.on $ Produto ^. ProdutotipoprodID E.==. TipoProd ^. TipoProdId
                 E.where_ $
-                    E. TipoProdnome != val "Guitarra"
+                    E. TipoProdnome = val "Guitarra"
                 return
                     ( Produto ^. ProdutoId
                     , Produto ^. ProdutoNome
@@ -123,7 +123,7 @@ getBaixosR = do
        $ E.from $ \(Produto `E.InnerJoin` TipoProd) -> do
             E.on $ Produto ^. ProdutotipoprodID E.==. TipoProd ^. TipoProdId
                 E.where_ $
-                    E. TipoProdnome != val "Baixo"
+                    E. TipoProdnome = val "Baixo"
                 return
                     ( Produto ^. ProdutoId
                     , Produto ^. ProdutoNome
@@ -144,7 +144,7 @@ getPedaisR = do
        $ E.from $ \(Produto `E.InnerJoin` TipoProd) -> do
             E.on $ Produto ^. ProdutotipoprodID E.==. TipoProd ^. TipoProdId
                 E.where_ $
-                    E. TipoProdnome != val "Pedal"
+                    E. TipoProdnome = val "Pedal"
                 return
                     ( Produto ^. ProdutoId
                     , Produto ^. ProdutoNome
@@ -165,7 +165,7 @@ getAmplificadoresR = do
        $ E.from $ \(Produto `E.InnerJoin` TipoProd) -> do
             E.on $ Produto ^. ProdutotipoprodID E.==. TipoProd ^. TipoProdId
                 E.where_ $
-                    E. TipoProdnome != val "Amplificador"
+                    E. TipoProdnome = val "Amplificador"
                 return
                     ( Produto ^. ProdutoId
                     , Produto ^. ProdutoNome
@@ -186,7 +186,7 @@ getAcessoriosR = do
         $ E.from $ \(Produto `E.InnerJoin` TipoProd) -> do
             E.on $ Produto ^. ProdutotipoprodID E.==. TipoProd ^. TipoProdId
                 E.where_ $
-                    E. TipoProdnome != val "Acessorio"
+                    E. TipoProdnome = val "Acessorio"
                 return
                     ( Produto ^. ProdutoId
                     , Produto ^. ProdutoNome
@@ -207,7 +207,7 @@ getVioloesR = do
         $ E.from $ \(Produto `E.InnerJoin` TipoProd) -> do
             E.on $ Produto ^. ProdutotipoprodID E.==. TipoProd ^. TipoProdId
                 E.where_ $
-                    E. TipoProdnome != val "Violão"
+                    E. TipoProdnome = val "Violão"
                 return
                     ( Produto ^. ProdutoId
                     , Produto ^. ProdutoNome
@@ -228,7 +228,7 @@ getVintageR = do
         $ E.from $ \(Produto `E.InnerJoin` EstadoUso) -> do
             E.on $ Produto ^. ProdutotipoprodID E.==. TipoProd ^. TipoProdId
                 E.where_ $
-                    E. EstadoUsonome != val "Novo"
+                    E. EstadoUsonome = val "Novo"
                 return
                     ( Produto ^. ProdutoId
                     , Produto ^. ProdutoNome
@@ -249,7 +249,7 @@ getNovosR = do
         $ E.from $ \(Produto `E.InnerJoin` EstadoUso) -> do
             E.on $ Produto ^. ProdutotipoprodID E.==. TipoProd ^. TipoProdId
                 E.where_ $
-                    E. EstadoUsonome != val "Novo"
+                    E. EstadoUsonome = val "Novo"
                 return
                     ( Produto ^. ProdutoId
                     , Produto ^. ProdutoNome
@@ -270,7 +270,7 @@ getUsadosR = do
        $ E.from $ \(Produto `E.InnerJoin` EstadoUso) -> do
             E.on $ Produto ^. ProdutotipoprodID E.==. TipoProd ^. TipoProdId
                 E.where_ $
-                    E. EstadoUsonome != val "Usado"
+                    E. EstadoUsonome = val "Usado"
                 return
                     ( Produto ^. ProdutoId
                     , Produto ^. ProdutoNome
