@@ -16,7 +16,16 @@ Produto json
     observacoes     Text
     estoqueminimo   Int
     estoqueatual    Int
+    tipoprod        TipoProdId
+    estaduso        EstadoUsoId
     deriving Show
+
+TipoProd
+    nometp          Text
+    
+EstadoUso
+    nomees          Text
+
     
 Funcionario json
     nome            Text
@@ -36,5 +45,4 @@ Venda json
 	
 FormaPgto json
     formapgto   Text
-    
     
