@@ -90,7 +90,8 @@ getRepEstoqueR = do
            $ E.from $ \(Produto `E.InnerJoin` EstadoUso) -> do
                 E.on $ Produto ^. ProdutoEstadouso E.==. EstadoUso ^. EstadoUsoId
                 E.where_ $
-                    E. EstadoUsonome != val "Vintage"
+                    E. EstadoUsonome != val "Vintage",
+                    E. ProdutoEstoqueAtual <= ProdutoEstoqueminimo
                 return
                     ( Produto ^. ProdutoId
                     , Produto ^. ProdutoNome
