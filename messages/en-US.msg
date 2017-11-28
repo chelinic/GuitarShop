@@ -1,0 +1,2 @@
+Bemvindo: Welcome
+Visita: Guest
