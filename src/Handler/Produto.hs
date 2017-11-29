@@ -11,6 +11,7 @@ import Import
 import Network.HTTP.Types.Status
 import Database.Persist.Postgresql
 import GHC.Generics
+
 	
 data Nome = Nome {nome :: Text} deriving Generic
 instance ToJSON Nome where
@@ -19,52 +20,34 @@ instance FromJSON Nome where
 formProduto :: Form Produto
 formProduto = renderBootstrap $ Produto 
     <$> areq textField "Nome:" Nothing
+    <$> areq textField "Marca:" Nothing
     <*> areq doubleField "Valor:" Nothing
     <*> areq dayField "Data de chegada:" Nothing
     <*> areq intField "Ano:" Nothing
     <*> areq textField "Observacoes:" Nothing
     <*> areq intField "Estoque minimo:" Nothing
     <*> areq intField "Estoque atual:" Nothing
-
+    <*> areq radioField "Novo" (Just someDefault)
+    <*> areq radioField "Usado" (Just someDefault)
+    <*> areq radioField "Vintage" (Just someDefault)
     
+formArquivo :: Form FileInfo
+formArquivo = renderDivs $ areq fileField "Imagem do produto: " Nothing
+
 postApagarProdR :: ProdutoId -> Handler Html
 postApagarProdR pid = do
     runDB $ delete pid
     redirect TodosProdR
 
-getTodosProdR :: Handler Html
-getTodosProdR = do 
-    produtos <- runDB $ selectList [] [Asc ProdutoNome]
-    defaultLayout $ do 
-        addStylesheet $ (StaticR css_bootstrap_css)
-        [whamlet|
-            <table>
-                <thead>
-                    <tr>
-                        <td> Id
-                        <td> Nome 
-                        <td> Valor 
-                        <td> Produto
-                        <td> 
-                
-                <tbody>
-                    $forall (Entity pid produto) <- produtos
-                        <tr> 
-                            <td> #{fromSqlKey pid}
-                            <td> #{produtoNome produto}
-                            <td> #{produtoValor produto}
-                            <td> #{produtoEstoqueatual produto}
-                            <td> 
-                                <form action=@{ApagarProdR pid} method=post>
-                                    <input type="submit" value="Deletar">
-                            
-        |]
-
-
-
 -- unpack retorna string 
 -- return para colocar algo puro dentro da mônada
 -- $ para monada Maybe	
+
+footer :: WidgetT App IO ()  
+footer = $(whamletFile "templates/Footer.hamlet")
+
+prods :: WidgetT App IO ()
+prods = $(whamletFile "templates/Produto.hamlet")
 
 putAlteraProdR :: ProdutoId -> Handler Value
 putAlteraProdR pid = do
@@ -77,14 +60,17 @@ getVerProdR :: ProdutoId -> Handler Html
 getVerProdR pid = do
     produto <- runDB $ get404 pid
     defaultLayout $
-        [whamlet| 
+        [whamlet|
+            ^{prods}
             <div>
             <ul>
                 <li><strong> Nome: #{produtoNome produto}
+                <li><strong> Marca: #{produtoMarca produto}
                 <li><strong> Preco: #{produtoValor produto}
                 <li><strong> Ano: #{produtoAno produto}
                 <li><strong> Estoque: #{produtoEstoqueatual produto}
                 <li><strong> Observacoes: #{produtoObservacoes produto}
+            ^{footer}
         |]
 
 postCadastroProdR :: Handler Html
@@ -92,14 +78,19 @@ postCadastroProdR = do
     ((result,_),_) <- runFormPost formProduto
     case result of
         FormSuccess produto -> do
-            runDB $ insert produto
-            redirect CadastroProdR
+            ((res,_),_) <- runFormPost formArquivo
+            case res of 
+                FormSuccess arq -> do 
+                liftIO $ fileMove arq ("static/" ++ (unpack $ fileName arq))
+                runDB $ insert produto
+                redirect CadastroProdR
         _ -> redirect HomeR
         -- em caso de erro
         
 getCadastroProdR :: Handler Html
 getCadastroProdR = do
     (widget, enctype) <- generateFormPost formProduto
+    (widget, enctype) <- generateFormPost formArquivo
     defaultLayout $ do
         addStylesheet $ (StaticR css_bootstrap_css)
         [whamlet|
@@ -112,19 +103,7 @@ getCadastroProdR = do
         o action é o mesmo, porém no post
     
     --}
-    
-getDetalheProdR :: ProdutoId -> Handler Html
-getDetalheProdR pid = do
-    produto <- runDB $ get404 pid
-    defaultLayout $
-        [whamlet| 
-            <div>
-            <ul>
-                <li><strong> Nome: #{produtoNome produto}
-                <li><strong> Preco: #{produtoValor produto}
-                <li><strong> Estoque: #{produtoEstoqueatual produto}
-        |]
-        
+
 {--
 Query Join
 
