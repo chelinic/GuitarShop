@@ -10,6 +10,8 @@ Cliente json
     
 Produto json
     nome            Text
+    img             ImagemId
+    marca           Text
     valor           Double
     dtchegada       Day
     ano             Int
@@ -26,7 +28,9 @@ TipoProd
 EstadoUso
     nomees          Text
 
-    
+Imagem
+    nome            Text
+
 Funcionario json
     nome            Text
     cpf 	        Text
