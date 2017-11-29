@@ -13,9 +13,6 @@ import Network.HTTP.Types.Status
 import Database.Persist.Postgresql
 import Data.Time.Clock
 import Data.Time.Calendar
-import Database.Esqueleto.PostgreSQL
-import qualified Database.Esqueleto      as E
-import Database.Esqueleto   ((^.))
 
 footer :: WidgetT App IO ()  
 footer = $(whamletFile "templates/Footer.hamlet")
@@ -33,7 +30,7 @@ getHomeR = do
     defaultLayout $ do
         [whamlet|
             $maybe cli <- clientelog
-                <h1> _{MsgBemvindo} - #{Cliente}
+                <h1 href=@{AlterarDadosCliR}> _{MsgBemvindo} - #{Cliente}
             $nothing
                 <h1> _{MsgBemvindo} - _{MsgVisita}
             <ul>
@@ -65,6 +62,7 @@ getRecemChegadosR = do
                         <tr>
                             <td> Id
                             <td> Nome 
+                            <td> Marca
                             <td> Estoqueminimo
                             <td> Estoqueatual
                             <td> Produto
@@ -105,6 +103,7 @@ getGuitarrasR = do
                 return
                     ( Produto ^. ProdutoId
                     , Produto ^. ProdutoNome
+                    , Produto ^. ProdutoMarca
                     , Produto ^. ProdutoEstoqueAtual
                     , EstadoUso ^. EstadoUsonome
                     
@@ -127,6 +126,7 @@ getBaixosR = do
                 return
                     ( Produto ^. ProdutoId
                     , Produto ^. ProdutoNome
+                    , Produto ^. ProdutoMarca
                     , Produto ^. ProdutoEstoqueAtual
                     , EstadoUso ^. EstadoUsonome
                     
@@ -148,6 +148,7 @@ getPedaisR = do
                 return
                     ( Produto ^. ProdutoId
                     , Produto ^. ProdutoNome
+                    , Produto ^. ProdutoMarca
                     , Produto ^. ProdutoEstoqueAtual
                     , EstadoUso ^. EstadoUsonome
                     
@@ -169,6 +170,7 @@ getAmplificadoresR = do
                 return
                     ( Produto ^. ProdutoId
                     , Produto ^. ProdutoNome
+                    , Produto ^. ProdutoMarca
                     , Produto ^. ProdutoEstoqueAtual
                     , EstadoUso ^. EstadoUsonome
                     
@@ -190,6 +192,7 @@ getAcessoriosR = do
                 return
                     ( Produto ^. ProdutoId
                     , Produto ^. ProdutoNome
+                    , Produto ^. ProdutoMarca
                     , Produto ^. ProdutoEstoqueAtual
                     , EstadoUso ^. EstadoUsonome
                     
@@ -211,6 +214,7 @@ getVioloesR = do
                 return
                     ( Produto ^. ProdutoId
                     , Produto ^. ProdutoNome
+                    , Produto ^. ProdutoMarca
                     , Produto ^. ProdutoEstoqueAtual
                     , EstadoUso ^. EstadoUsonome
                     
@@ -232,6 +236,7 @@ getVintageR = do
                 return
                     ( Produto ^. ProdutoId
                     , Produto ^. ProdutoNome
+                    , Produto ^. ProdutoMarca
                     , Produto ^. ProdutoEstoqueAtual
                     , EstadoUso ^. EstadoUsonome
                     
@@ -253,6 +258,7 @@ getNovosR = do
                 return
                     ( Produto ^. ProdutoId
                     , Produto ^. ProdutoNome
+                    , Produto ^. ProdutoMarca
                     , Produto ^. ProdutoEstoqueAtual
                     , EstadoUso ^. EstadoUsonome
                     
@@ -274,6 +280,7 @@ getUsadosR = do
                 return
                     ( Produto ^. ProdutoId
                     , Produto ^. ProdutoNome
+                    , Produto ^. ProdutoMarca
                     , Produto ^. ProdutoEstoqueAtual
                     , EstadoUso ^. EstadoUsonome
                     
