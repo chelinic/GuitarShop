@@ -10,6 +10,8 @@ module Foundation where
 import Import.NoFoundation
 import Database.Persist.Sql (ConnectionPool, runSqlPool)
 import Yesod.Core.Types     (Logger)
+import qualified Database.Esqueleto      as E
+import Database.Esqueleto   ((^.))
 
 data App = App
     { appSettings    :: AppSettings
