@@ -11,9 +11,6 @@ import Import
 import Network.HTTP.Types.Status
 import Database.Persist.Postgresql
 import GHC.Generics
-import Database.Esqueleto.PostgreSQL
-import qualified Database.Esqueleto      as E
-import Database.Esqueleto   ((^.))
 
 
 {--
@@ -22,6 +19,12 @@ instance ToJSON Estoque where
 instance FromJSON Estoque where
 --}	
 
+footer :: WidgetT App IO ()  
+footer = $(whamletFile "templates/Footer.hamlet")
+
+topo :: WidgetT App IO ()
+topo = $(whamletFile "templates/Funcionario.hamlet")
+
 formFuncionario :: Form Funcionario
 formFuncionario = renderBootstrap $ Funcionario
     <$> areq textField "Nome:" Nothing
@@ -29,7 +32,7 @@ formFuncionario = renderBootstrap $ Funcionario
     <*> areq textField "CPF:" Nothing
     <*> areq textField "Senha:" Nothing
     <*> areq textField "Telefone:" Nothing
-
+    
 getFuncR :: Handler Html
 getFuncR = undefined
 --	funclog <- lookupSession "_ID"
@@ -102,6 +105,7 @@ getRepEstoqueR = do
     defaultLayout $ do 
         addStylesheet $ (StaticR css_bootstrap_css)
         [whamlet|
+            ^{topo}
             <table>
                 <thead>
                     <tr>
@@ -120,14 +124,53 @@ getRepEstoqueR = do
                             <td> #{produtoEstoqueatual produto}
                             <td> #{produtoEstoqueminimo produto}
                             <td> 
+            ^{footer}
         |]
         
 
 getRepEstoqueProdR :: ProdutoId -> Handler Html
-getRepEstoqueProdR = undefined
+getRepEstoqueProdR pid = do
+    let prod = runDB $ E.select
+       $ E.from $ \(Produto `E.InnerJoin` EstadoUso) -> do
+           E.where_ $
+               E. ProdutoId != val pid
+                return
+                    ( Produto ^. ProdutoId
+                    , Produto ^. ProdutoNome
+                    , Produto ^. ProdutoMarca
+                    , Produto ^. ProdutoEstoqueAtual
+                    , EstadoUso ^. EstadoUsonome
+                    )
+     [whamlet|
+        ^{topo}
+        <table>
+            <thead>
+                <tr>
+                    <td> Id
+                    <td> Nome 
+                    <td> Estoqueminimo
+                    <td> Estoqueatual
+                    <td> Produto
+                    <td>  
+            
+            <tbody>
+                $forall (Entity idproduto produto) <- prod
+                    <tr> 
+                        <td> #{fromSqlKey idproduto}
+                        <td> #{produtoNome produto}
+                        <td> #{produtoEstoqueatual produto}
+                        <td> #{produtoEstoqueminimo produto}
+                        <td> 
+                 <form action=@{RepEstoqueR pid} method=post>
+                    <input type="text" value="Quantidade recebida">
+                        <input type="submit" value="Registrar">
+            ^{footer}
+        
+     |]               
 
-postRepEstoqueProdR :: Handler Html
+postRepEstoqueProdR :: ProdutoId -> Handler Html
 postRepEstoqueProdR = do
+    runDB $ replace pid produto
     redirect RepEstoqueR
 
 postCadastroFuncR :: Handler Html
@@ -148,9 +191,11 @@ getCadastroFuncR = do
     defaultLayout $ do
         addStylesheet $ (StaticR css_bootstrap_css)
         [whamlet|
+            ^{topo}
             <form action=@{CadastroFuncR} method=post anctype=#{enctype}>
             ^{widget}
             <input type="submit" value="Cadastrar">
+            ^{footer}
         |]
     {--
         o widget é o formulário
@@ -164,7 +209,47 @@ postFuncLogoutR = do
     redirect HomeR
     
 getListarVendas :: Handler Html
-getListarVendas = undefined
+getListarVendas = do
+    let vendas = runDB $ E.select
+       $ E.from $ \(Cliente `E.InnerJoin` Venda `E.InnerJoin` Produto) -> do
+            E.on $ Venda ^. VendaClienteId E.==. Cliente ^. ClienteId
+            E.on $ Venda ^. VendaProdutoId E.==. Produto ^. ProdutoId
+               return
+                   ( Cliente ^. ClienteNome
+                   , Produto ^. ProdutoNome
+                   , Produto ^. ProdutoMarca
+                   , Venda ^. Quantidade
+                   , Venda ^. FormaPgtoId
+                   )
+    [whamlet|
+        ^{topo}
+        <table>
+            <thead>
+                <tr>
+                    <td> ClienteNome
+                    <td> ProdutoNome
+                    <td> ProdutoMarca
+                    <td> VendaQuantidade
+                    <td> VendaFormapgtoId
+                    <td>  
+            
+            <tbody>
+                $forall (Entity idvenda venda) <- venda
+                    <tr> 
+                        <td> #{fromSqlKey idvenda}
+                        <td> #{clienteNome cliente}
+                        <td> #{produtoNome produto}
+                        <td> #{produtoMarca produto}
+                        <td> #{vendQuantidade venda}
+                        <td> #{vendFormapgtoID formapgto}
+                        <td> 
+                 <form action=@{RepEstoqueR pid} method=post>
+                    <input type="text" value="Quantidade recebida">
+                        <input type="submit" value="Registrar">
+            ^{footer}
+        
+     |]               
+    
 
 
 --https://hackage.haskell.org/package/esqueleto-2.5.3/docs/Database-Esqueleto.html
