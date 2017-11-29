@@ -11,6 +11,7 @@ import Import
 import Database.Persist.Postgresql
 import GHC.Generics
 
+
 formCadCliente :: Form Cliente
 formCadCliente = renderBootstrap $ Cliente
     <$> areq textField "Nome:" Nothing
@@ -18,6 +19,13 @@ formCadCliente = renderBootstrap $ Cliente
     <*> areq textField "Telefone:" Nothing
     <*> areq textField "Email:" Nothing
     <*> areq textField "Senha:" Nothing
+    
+formAtCadCliente :: Form Cliente
+formAtCadCliente = renderBootstrap $ Cliente
+    <$> areq textField "Nome:" ClienteNome
+    <*> areq textField "CPF:" ClienteCpf
+    <*> areq textField "Telefone:" ClienteTelefone
+    <*> areq textField "Senha:" ClienteSenha
     
 formLoginCli :: Form (Text, Text)
 -- Form com dois campos de texto
@@ -99,22 +107,50 @@ getCadastroCliR = do
     
     --}
 
-putAlterarDadosCliR :: ClienteId ->Handler Value
-putAlterarDadosCliR cid = do
-	_ <- runDB $ get404 cid
-	novoCli <- requireJsonBody :: Handler Cliente
-	runDB $ replace cid novoCli
-	sendStatusJSON noContent204 (object ["resp" .=("Updated" ++ show (fromSqlKey cid))])
+getAlterarDadosCLiR :: ClienteId -> Handler Html
+getAlterarDadosCLiR cid = do
+    clidados <- runDB $ E.select
+       $ E.from $ \(Cliente) -> do
+            E.where_ $
+                E. ClienteId = val "cid"
+            return
+                ( Cliente ^. ClienteNome
+                , Cliente ^. ClienteSenha
+                , Cliente ^. ClienteTelefone
+                , Cliente ^. ClienteCpf
+                )
+    (widget, enctype) <- generateFormPost formAtCadCliente
+    defaultLayout $ do
+        addStylesheet $ (StaticR css_bootstrap_css)
+        [whamlet|
+            ^{topo}
+            <form action=@{AlterarDadosCliR} method=post anctype=#{enctype}>
+            ^{widget}
+            <input type="submit" value="Atualizar">
+            ^{footer}
+        |]
+--talvez dê erro por não puxar o email            
+
+postAlterarDadosCliR :: ClienteId ->Handler Html
+postAlterarDadosCliR cid = do
+	((result,_),_) <- runFormPost formAtCadCliente
+    case result of
+        FormSuccess cliente -> do
+            runDB $ replace cid cliente
+            redirect HomeR
+        _ -> redirect HomeR
 
 
-getCarrinhoComprasR :: Handler TypedContent
-getCarrinhoComprasR = undefined
-
-postFinalizarCompraR :: Handler TypedContent
-postFinalizarCompraR = undefined
-
+postFinalizarCompraR :: ProdutoId -> ClienteId -> Int -> Handler Html
+postFinalizarCompraR pid cid qtd= do
+    hoje <- getCurrentTime
+    compracli <- insert $ Venda cid  pid hoje qtd
+--parei aqui
+    -- alteração de dados do cliente com esqueleto
+    -- terminar finalizar compras
 
 postCliLogoutR :: Handler Html
 postCliLogoutR = do 
     deleteSession "_ID"
     redirect HomeR
+    
